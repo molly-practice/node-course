@@ -18,7 +18,25 @@ app.use(express.static(public_dir_path))
 app.get('', (req, res) => {
     // here we use render to render our views, instead of send like youd use in html
     // render 1st arg- name of file, no path, no extension
-    res.render('index')
+    // render 2nd arg- an object containing all of the values you want that view to be able to access
+    res.render('index', {
+        title: 'Weather App',
+        name: 'Molly Novash'
+    })
+})
+
+app.get('/about', (req, res) => {
+    res.render('about', {
+        title: 'About me',
+        photo: '../img/Fish.jpg'
+    })
+})
+
+app.get('/help', (req, res) => {
+    res.render('help', {
+        title: 'Help page',
+        message: 'Here where ya come when ya need some help!'
+    })
 })
 
 // we have one domain, and it's all going to run on
