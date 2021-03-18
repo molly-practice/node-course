@@ -7,8 +7,19 @@ const public_dir_path = path.join(__dirname, '../public')
 
 const app = express()
 
+// tell express which templating engine we installed by using app.set
+// set allows you to set a value for a given express setting in key value pairs
+// express is considered a 'view engine'
+app.set('view engine', 'hbs')
 // static takes the path to the folder we want to serve up
 app.use(express.static(public_dir_path))
+
+// here's where we're switching our home page from index.html to index.hbs
+app.get('', (req, res) => {
+    // here we use render to render our views, instead of send like youd use in html
+    // render 1st arg- name of file, no path, no extension
+    res.render('index')
+})
 
 // we have one domain, and it's all going to run on
 // a single express server
