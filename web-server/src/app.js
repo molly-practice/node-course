@@ -2,16 +2,25 @@
 // we call it to create a new application
 const path = require('path')
 const express = require('express')
+const hbs = require('hbs')
 
+// --Define paths for Express config
 const public_dir_path = path.join(__dirname, '../public')
+const viewsPath = path.join(__dirname, './templates/views')
+const partialsPath = path.join(__dirname, './templates/partials')
 
 const app = express()
 
 // tell express which templating engine we installed by using app.set
 // set allows you to set a value for a given express setting in key value pairs
 // express is considered a 'view engine'
+// --setup handlebars engine and views/partials location
 app.set('view engine', 'hbs')
+app.set('views', viewsPath)
+hbs.registerPartials(partialsPath)
+
 // static takes the path to the folder we want to serve up
+// --set up static directory to serve
 app.use(express.static(public_dir_path))
 
 // here's where we're switching our home page from index.html to index.hbs
@@ -28,13 +37,15 @@ app.get('', (req, res) => {
 app.get('/about', (req, res) => {
     res.render('about', {
         title: 'About me',
-        photo: '../img/Fish.jpg'
+        photo: '../img/Fish.jpg',
+        name: 'Molly Novash'
     })
 })
 
 app.get('/help', (req, res) => {
     res.render('help', {
         title: 'Help page',
+        name: 'Molly Novash',
         message: 'Here where ya come when ya need some help!'
     })
 })
@@ -57,6 +68,23 @@ app.get('/weather', (req, res) => {
     res.send({
         forecast: 'Cold as shit',
         location: 'Seattle'
+    })
+})
+
+app.get('/help/*', (req, res) => {
+    res.render('error', {
+        title: '404',
+        name: 'Molly Novash',
+        error: 'Help article not found.'
+    })
+})
+
+// another route for 404 errors
+app.get('*', (req, res) => {
+    res.render('error', {
+        title: '404',
+        name: 'Molly Novash',
+        error: 'Page does not exist.'
     })
 })
 
